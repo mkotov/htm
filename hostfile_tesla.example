@@ -1,0 +1,6 @@
+node4.local slots=2
+node3.local slots=2
+node2.local slots=3
+node1.local slots=3
+
+

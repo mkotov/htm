@@ -1,0 +1,36 @@
+#!/bin/bash
+
+#PBS -V
+#PBS -r n
+#PBS -l walltime=24:00:00
+#PBS -l nodes=node3.local+node4.local
+#PBS -N HTM_v2_20
+#PBS -j oe						
+#PBS -m e
+#PBS -M matvej.kotov+tesla@gmail.com
+
+echo "# psbJobId=$PBS_JOBID"
+echo "# psbJobName=$PBS_JOBNAME"
+echo "# startTime="`date`
+
+startTime=`date +%s`
+
+cd $PBS_O_WORKDIR
+
+mpirun -hostfile hostfile_tesla -np 4 ./a.out \
+	--fromMaxStepCount=1 \
+	--countMaxStepCount=12 \
+	--mDeltaMaxStepCount=2 \
+	--fromStateCount=100 \
+	--countStateCount=100 \
+	--deltaStateCount=100 \
+	--iterationCount=1000 \
+	--stopActionUsed \
+	--threadBlockSize=256 \
+	--runCount=4 \
+	--seed=1345789478
+
+echo "# endTime="`date`
+endTime=`date +%s`
+echo "# totalTime=$((endTime - startTime)) sec"
+
